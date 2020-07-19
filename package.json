@@ -1,0 +1,19 @@
+{
+  "name": "deliah-resto-back",
+  "version": "1.0.0",
+  "description": "Backend for Deliah Resto",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohanCamiloL/deliah-resto-back.git"
+  },
+  "author": "Johan Camilo López Girón",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohanCamiloL/deliah-resto-back/issues"
+  },
+  "homepage": "https://github.com/JohanCamiloL/deliah-resto-back#readme"
+}
