@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/JohanCamiloL/deliah-resto-back/issues"
   },
-  "homepage": "https://github.com/JohanCamiloL/deliah-resto-back#readme"
+  "homepage": "https://github.com/JohanCamiloL/deliah-resto-back#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
