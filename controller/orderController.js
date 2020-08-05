@@ -1,11 +1,20 @@
+const database = require('../config/database');
+
 /**
  * Get Orders from Database and return an array of Orders.
  * @param {object} req Client request.
  * @param {object} res Client response.
  */
 const getOrders = (req, res) => {
-    res.send('Todo');
-    //TODO
+    const { results, error } = await database.getAllOrdersFromDB();
+
+    if (error) {
+        res.status(400)
+            .json(error);
+    } else {
+        res.status(200)
+            .json(results);
+    }
 }
 
 /**

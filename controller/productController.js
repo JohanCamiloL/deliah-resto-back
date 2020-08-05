@@ -1,11 +1,19 @@
+const database = require('../config/database');
+
 /**
  * Get Products from Database and return an Array of Products.
  * @param {object} req Client request.
  * @param {object} res Client response.
  */
-const getProducts = (req, res) => {
-    res.send('Todo');
-    //TODO
+const getProducts = async (req, res) => {
+    const { results, error } = await database.getAllProductsFromDB();
+    if (error) {
+        res.status(400)
+            .json(error);
+    } else {
+        res.status(400)
+            .json(results);
+    }
 }
 
 /**

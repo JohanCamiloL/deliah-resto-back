@@ -1,15 +1,11 @@
-const controller = require('../controller/controller')
+const userController = require('../controller/userController');
+const orderController = require('../controller/orderController');
+const productController = require('../controller/productController');
 
-/**
- * Generate Express routes
- * @param {Express} app 
- */
-const routes = (app) => {
-    app.get('/products', controller.getProducts);
+module.exports = (app) => {
+    app.get('/users', userController.getUsers);
 
-    app.get('/users', controller.getUsers);
+    app.get('/products', productController.getProducts);
 
-    app.get('/orders', controller.getOrders);
+    app.get('/orders', orderController.getOrders);
 }
-
-module.exports = routes;
