@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 
-const sequelize = Sequelize('');
+//const sequelize = new Sequelize('');
 
 /**
  * Get users from DB.
- * @returns {Object} Users list.
+ * @returns {Object} Query state.
  */
 const getAllUsersFromDB = async () => {
     const query = '';
@@ -14,7 +14,7 @@ const getAllUsersFromDB = async () => {
 
 /**
  * Get products from DB.
- * @returns {Object} Products list.
+ * @returns {Object} Query state.
  */
 const getAllProductsFromDB = async () => {
     const query = '';
@@ -24,11 +24,24 @@ const getAllProductsFromDB = async () => {
 
 /**
  * Get orders from DB.
- * @returns {Object} Orders list.
+ * @returns {Object} Query state.
  */
 const getAllOrdersFromDB = async () => {
     const query = '';
     //TODO
+    return await makeRequestOnDatabase(query);
+}
+
+/**
+ * Saves an user on DB.
+ * @param {Object} userObject User object.
+ * @returns {Object} Query state.
+ */
+const saveUserOnDB = async (userObject) => {
+    const { userName, fullName, email, phone, address, password } = userObject;
+
+    const query = '';
+
     return await makeRequestOnDatabase(query);
 }
 
@@ -50,5 +63,6 @@ const makeRequestOnDatabase = async (query) => {
 module.exports = {
     getAllUsersFromDB,
     getAllProductsFromDB,
-    getAllOrdersFromDB
+    getAllOrdersFromDB,
+    saveUserOnDB
 }

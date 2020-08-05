@@ -1,9 +1,15 @@
 const routes = require('./config/routes');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const express = require('express');
 const app = express();
 
-const SERVER_PORT = 8001;
+const SERVER_PORT = 8000;
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 routes(app);
 

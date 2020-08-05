@@ -5,6 +5,8 @@ const productController = require('../controller/productController');
 module.exports = (app) => {
     app.get('/users', userController.getUsers);
 
+    app.post('/users', userController.createUser);
+
     app.get('/products', productController.getProducts);
 
     app.get('/orders', orderController.getOrders);

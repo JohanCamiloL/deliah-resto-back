@@ -5,7 +5,7 @@ const database = require('../config/database');
  * @param {object} req Client request.
  * @param {object} res Client response.
  */
-const getOrders = (req, res) => {
+const getOrders = async (req, res) => {
     const { results, error } = await database.getAllOrdersFromDB();
 
     if (error) {
