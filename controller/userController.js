@@ -1,4 +1,4 @@
-const database = require('../config/database');
+const userServices = require('../services/userServices');
 
 /**
  * Get Users from Database and return an Array of Users.
@@ -6,14 +6,9 @@ const database = require('../config/database');
  * @param {import('express').Response} res Response object
  */
 const getUsers = async (req, res) => {
-    const { results, error } = await database.getAllUsersFromDB();
-    if (error) {
-        res.status(400)
-            .json(error);
-    } else {
-        res.status(200)
-            .json(results);
-    }
+    const users = userServices.getUsers();
+
+    res.status(200).json({ users });
 }
 
 /**
@@ -22,8 +17,11 @@ const getUsers = async (req, res) => {
  * @param {import('express').Response} res Response object
  */
 const getUserById = (req, res) => {
-    res.send('Todo');
-    //TODO
+    const { id } = req.params;
+
+    const user = userServices.getUserById(id);
+
+    res.status(200).json({ user });
 }
 
 /**
@@ -32,16 +30,75 @@ const getUserById = (req, res) => {
  * @param {import('express').Response} res Response object
  */
 const createUser = async (req, res) => {
-    const { body } = req;
-    const { error } = await database.saveUserOnDB(body);
+    const { username, fullname, email, phone, address, password } = req.body;
 
-    if (error) {
-        res.status(400)
-            .json(error);
+    const userByUsername = userServices.getUserByUsername(username);
+    const userByEmail = userServices.getUserByEmail(email);
+
+    if (userByUsername) {
+        res.status(409).json({ message: `User with username ${username} already exists` });
+    } else if (userByEmail) {
+        res.status(409).json({ message: `User with email ${email} already exists` });
+    }
+
+    if (username && fullname && email && phone && address && password) {
+        const userId = userServices.createUser({ username, fullname, email, phone, address, password });
+
+        res.status(201).json({ userId });
     } else {
-        res.status(200)
-            .json({ userName, email });
+        res.status(400).json({ message: 'Malformed body' });
     }
 }
 
-module.exports = { getUserById, getUsers, createUser };
+/**
+ * Updates an user.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
+ */
+const updateUser = (req, res) => {
+    const { id } = req.params;
+    const properties = req.body;
+
+    userServices.updateUser(id, properties);
+
+    res.status(200).json({ id });
+}
+
+/**
+ * 
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
+ */
+const deleteUser = (req, res) => {
+    const { id } = req.params;
+
+    userServices.deleteUserById(id);
+
+    res.status(200).json({ id });
+}
+
+/**
+ * Verifies if an user exists by the given id.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
+ */
+const verifyIfUserExistsById = (req, res, next) => {
+    const { id } = req.params;
+
+    const user = userServices.getUserById(id);
+
+    if (user) {
+        next();
+    } else {
+        res.status(404).json({ message: `User with id ${id} not found` });
+    }
+}
+
+module.exports = {
+    getUserById,
+    getUsers,
+    createUser,
+    updateUser,
+    verifyIfUserExistsById,
+    deleteUser
+};

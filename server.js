@@ -23,8 +23,7 @@ userRoutes(app);
 app.use((err, req, res, next) => {
     if (err) {
         console.log(err);
-        res.json(500)
-            .send({ message: 'Internal error' });
+        res.json(500).send({ message: 'Internal error' });
     }
 
     next();
