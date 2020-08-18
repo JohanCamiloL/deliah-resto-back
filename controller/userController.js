@@ -65,7 +65,7 @@ const updateUser = (req, res) => {
 }
 
 /**
- * 
+ * Delete user by the given id.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
  */
