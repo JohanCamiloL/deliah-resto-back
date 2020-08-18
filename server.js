@@ -7,7 +7,7 @@ const userRoutes = require('./routes/userRoutes');
 const express = require('express');
 const app = express();
 
-const SERVER_PORT = 8000;
+const SERVER_PORT = 3000;
 
 app.use(cors()); // Allows requests from localhost.
 app.use(bodyParser.urlencoded({ extended: true })); // Accepts data when form post is performed.
@@ -17,6 +17,9 @@ orderRoutes(app);
 productRoutes(app);
 userRoutes(app);
 
+/**
+ * General error handler middleware.
+ */
 app.use((err, req, res, next) => {
     if (err) {
         console.log(err);

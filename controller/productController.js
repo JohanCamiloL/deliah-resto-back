@@ -2,8 +2,8 @@ const database = require('../config/database');
 
 /**
  * Get Products from Database and return an Array of Products.
- * @param {object} req Client request.
- * @param {object} res Client response.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
  */
 const getProducts = async (req, res) => {
     const { results, error } = await database.getAllProductsFromDB();
@@ -18,8 +18,8 @@ const getProducts = async (req, res) => {
 
 /**
  * Get product by its ID.
- * @param {object} req Client request.
- * @param {object} res Client response.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
  */
 const getProductById = (req, res) => {
     res.send('Todo');

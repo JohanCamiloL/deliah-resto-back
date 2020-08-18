@@ -2,8 +2,8 @@ const database = require('../config/database');
 
 /**
  * Get Users from Database and return an Array of Users.
- * @param {object} req Client request.
- * @param {object} res Client response.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
  */
 const getUsers = async (req, res) => {
     const { results, error } = await database.getAllUsersFromDB();
@@ -18,8 +18,8 @@ const getUsers = async (req, res) => {
 
 /**
  * Get user by its ID.
- * @param {object} req Client request.
- * @param {object} res Client response.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
  */
 const getUserById = (req, res) => {
     res.send('Todo');
@@ -28,9 +28,8 @@ const getUserById = (req, res) => {
 
 /**
  * Creates a new user.
- * @param {Object} req Client request.
- * @param {Object} res Client response.
- * @returns {Object} User info.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
  */
 const createUser = async (req, res) => {
     const { body } = req;

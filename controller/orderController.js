@@ -2,8 +2,8 @@ const database = require('../config/database');
 
 /**
  * Get Orders from Database and return an array of Orders.
- * @param {object} req Client request.
- * @param {object} res Client response.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
  */
 const getOrders = async (req, res) => {
     const { results, error } = await database.getAllOrdersFromDB();
@@ -19,8 +19,8 @@ const getOrders = async (req, res) => {
 
 /**
  * Get order by number.
- * @param {object} req Client request.
- * @param {object} res Client response.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
  */
 const getOrderByNumber = (req, res) => {
     res.send('Todo');
