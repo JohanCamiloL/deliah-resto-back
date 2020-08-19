@@ -1,5 +1,4 @@
 const User = require('../model/User');
-const userRoutes = require('../routes/userRoutes');
 
 let fakeUsers = [
     new User('name1', 'fullname1', 'email1', 'phone1', 'address1', 'password1'),

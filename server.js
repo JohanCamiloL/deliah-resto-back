@@ -13,9 +13,9 @@ app.use(cors()); // Allows requests from localhost.
 app.use(bodyParser.urlencoded({ extended: true })); // Accepts data when form post is performed.
 app.use(bodyParser.json());
 
+userRoutes(app);
 orderRoutes(app);
 productRoutes(app);
-userRoutes(app);
 
 /**
  * General error handler middleware.

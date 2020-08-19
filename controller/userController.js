@@ -81,6 +81,7 @@ const deleteUser = (req, res) => {
  * Verifies if an user exists by the given id.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
 const verifyIfUserExistsById = (req, res, next) => {
     const { id } = req.params;
