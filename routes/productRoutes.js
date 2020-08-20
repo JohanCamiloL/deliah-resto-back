@@ -1,4 +1,6 @@
 const productController = require('../controller/productController');
+const userController = require('../controller/userController');
+const authController = require('../controller/authController');
 
 /**
  * 

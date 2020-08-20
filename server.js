@@ -3,6 +3,7 @@ const cors = require('cors');
 const orderRoutes = require('./routes/orderRoutes');
 const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
+const authRouts = require('./routes/authRoutes');
 
 const express = require('express');
 const app = express();
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 userRoutes(app);
 orderRoutes(app);
 productRoutes(app);
+authRouts(app);
 
 /**
  * General error handler middleware.

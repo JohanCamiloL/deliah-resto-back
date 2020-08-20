@@ -29,22 +29,22 @@ const getUserById = (req, res) => {
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
  */
-const createUser = async (req, res) => {
+const createUser = (req, res) => {
     const { username, fullname, email, phone, address, password } = req.body;
 
-    const userByUsername = userServices.getUserByUsername(username);
-    const userByEmail = userServices.getUserByEmail(email);
-
-    if (userByUsername) {
-        res.status(409).json({ message: `User with username ${username} already exists` });
-    } else if (userByEmail) {
-        res.status(409).json({ message: `User with email ${email} already exists` });
-    }
-
     if (username && fullname && email && phone && address && password) {
-        const userId = userServices.createUser({ username, fullname, email, phone, address, password });
+        const userByUsername = userServices.getUserByUsername(username);
+        const userByEmail = userServices.getUserByEmail(email);
 
-        res.status(201).json({ userId });
+        if (userByUsername) {
+            res.status(409).json({ message: `User with username ${username} already exists` });
+        } else if (userByEmail) {
+            res.status(409).json({ message: `User with email ${email} already exists` });
+        } else {
+            const userId = userServices.createUser({ username, fullname, email, phone, address, password });
+
+            res.status(201).json({ userId });
+        }
     } else {
         res.status(400).json({ message: 'Malformed body' });
     }
@@ -95,11 +95,33 @@ const verifyIfUserExistsById = (req, res, next) => {
     }
 }
 
+/**
+ * Verify if the user that sends the request is the same that the id in the path params
+ * or has admin role.
+ * @param {import('express').Request} req Request object
+ * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
+ */
+const verifyUserIdRequestAndRole = (req, res, next) => {
+    const { id } = req.params;
+    const userId = req.userData.id;
+    const { rol } = req.userData;
+
+    console.log(req.userData);
+
+    if (id == userId || rol === 'admin') {
+        next();
+    } else {
+        res.status(401).json({ error: 'You can\'t look at other users info' });
+    }
+}
+
 module.exports = {
     getUserById,
     getUsers,
     createUser,
     updateUser,
     verifyIfUserExistsById,
-    deleteUser
+    deleteUser,
+    verifyUserIdRequestAndRole
 };

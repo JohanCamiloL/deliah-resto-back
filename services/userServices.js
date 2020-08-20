@@ -1,8 +1,9 @@
 const User = require('../model/User');
 
 let fakeUsers = [
-    new User('name1', 'fullname1', 'email1', 'phone1', 'address1', 'password1'),
-    new User('name2', 'fullname2', 'email2', 'phone2', 'address2', 'password2')
+    new User(1, 'name1', 'fullname1', 'email1', 'phone1', 'address1', 'password1'),
+    new User(2, 'name2', 'fullname2', 'email2', 'phone2', 'address2', 'password2'),
+    new User(3, 'Admin', 'Admin', 'adminmail', 'Adminphone', 'Adminaddress', 'password3', 'admin'),
 ];
 
 /**
@@ -33,7 +34,9 @@ const getUserById = (id) => {
  */
 const createUser = (userProps) => {
     const { username, fullname, email, phone, address, password } = userProps;
-    const user = new User(username, fullname, email, phone, address, password);
+    const userId = fakeUsers[fakeUsers.length - 1].id + 1;
+
+    const user = new User(userId, username, fullname, email, phone, address, password);
 
     const query = '';
 
@@ -93,6 +96,20 @@ const deleteUserById = (id) => {
     fakeUsers = filteredUsers;
 }
 
+/**
+ * Verify user email and password.
+ * @param {String} email User email.
+ * @param {String} password User password.
+ * @returns {Boolean} User exists.
+ */
+const verifyEmailAndPassword = (email, password) => {
+    const user = getUserByEmail(email);
+
+    if (!user) return false;
+
+    return (user.password === password) ? user : false;
+}
+
 module.exports = {
     getUsers,
     getUserById,
@@ -100,5 +117,6 @@ module.exports = {
     getUserByUsername,
     getUserByEmail,
     updateUser,
-    deleteUserById
+    deleteUserById,
+    verifyEmailAndPassword
 };
