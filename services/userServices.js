@@ -42,7 +42,7 @@ const createUser = (userProps) => {
 
     fakeUsers.push(user);
 
-    return 0;
+    return userId;
 }
 
 /**
@@ -78,12 +78,12 @@ const updateUser = (id, properties) => {
 
     const user = getUserById(id);
 
-    user.username = username | user.username;
-    user.fullname = fullname | user.fullname;
-    user.email = email | user.email;
-    user.phone = phone | user.phone;
-    user.address = address | user.address;
-    user.password = password | user.password;
+    user.username = username || user.username;
+    user.fullname = fullname || user.fullname;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.address = address || user.address;
+    user.password = password || user.password;
 }
 
 /**

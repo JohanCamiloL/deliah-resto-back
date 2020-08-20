@@ -52,11 +52,11 @@ const updateOrder = (id, orderProps) => {
     const query = '';
     const order = getOrderById(id);
 
-    order.description = description | order.description;
-    order.time = time | order.time;
-    order.state = state | order.state;
-    order.wayToPay = wayToPay | order.wayToPay;
-    order.total = total | order.total;
+    order.description = description || order.description;
+    order.time = time || order.time;
+    order.state = state || order.state;
+    order.wayToPay = wayToPay || order.wayToPay;
+    order.total = total || order.total;
 }
 
 /**

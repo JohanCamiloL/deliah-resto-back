@@ -112,7 +112,7 @@ const verifyUserIdRequestAndRole = (req, res, next) => {
     if (id == userId || rol === 'admin') {
         next();
     } else {
-        res.status(401).json({ error: 'You can\'t look at other users info' });
+        res.status(401).json({ error: 'You don\'t have rights to make this request' });
     }
 }
 

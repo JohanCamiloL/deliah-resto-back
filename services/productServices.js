@@ -1,8 +1,8 @@
 const Product = require('../model/Product');
 
 let fakeProducts = [
-    new Product('name1', 1, 1),
-    new Product('name2', 2, 2),
+    new Product(100000, 'name1', 1, 1),
+    new Product(100001, 'name2', 2, 2),
 ];
 
 /**
@@ -32,12 +32,14 @@ const getProductById = (id) => {
  */
 const createProduct = (productProps) => {
     const { name, price, amount } = productProps;
+    const productId = fakeProducts[fakeProducts.length - 1].id + 1;
+
     const query = '';
-    const product = new Product(name, price, amount);
+    const product = new Product(productId, name, price, amount);
 
     fakeProducts.push(product);
 
-    return 0;
+    return productId;
 }
 
 /**
@@ -50,9 +52,9 @@ const updateProduct = (id, productProps) => {
     const query = '';
     const product = getProductById(id);
 
-    product.name = name | product.name;
-    product.price = price | product.price;
-    product.amount = amount | product.amount;
+    product.name = name || product.name;
+    product.price = price || product.price;
+    product.amount = amount || product.amount;
 }
 
 /**
