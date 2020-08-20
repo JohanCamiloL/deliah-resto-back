@@ -107,8 +107,6 @@ const verifyUserIdRequestAndRole = (req, res, next) => {
     const userId = req.userData.id;
     const { rol } = req.userData;
 
-    console.log(req.userData);
-
     if (id == userId || rol === 'admin') {
         next();
     } else {
