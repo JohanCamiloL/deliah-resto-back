@@ -7,16 +7,21 @@ const authController = require('../controller/authController');
  * @param {import('express').Express} app 
  */
 module.exports = (app) => {
-    app.get('/orders', orderController.getOrders);
+    app.use('/orders', authController.verifyToken);
+
+    app.get('/orders', userController.verifyUserIdRequestAndRole, orderController.getOrders);
 
     app.post('/orders', orderController.createOrder);
 
-    app.get('/orders/:id', orderController.verifyIfOrderExists, orderController.getOrderById);
+    app.get('/orders/:id', userController.verifyUserIdRequestAndRole,
+        orderController.verifyIfOrderExists, orderController.getOrderById);
 
-    app.put('/orders/:id', orderController.verifyIfOrderExists, orderController.updateOrder);
+    app.put('/orders/:id', userController.verifyUserIdRequestAndRole,
+        orderController.verifyIfOrderExists, orderController.updateOrder);
 
-    app.delete('/orders/:id', orderController.verifyIfOrderExists, orderController.deleteOrder);
+    app.delete('/orders/:id', userController.verifyUserIdRequestAndRole,
+        orderController.verifyIfOrderExists, orderController.deleteOrder);
 
-    app.get('/users/:id/orders', userController.verifyIfUserExistsById,
-        orderController.verifyIfOrderExists, orderController.getUserOrders);
+    app.get('/users/:id/orders', authController.verifyToken, userController.verifyUserIdRequestAndRole,
+        userController.verifyIfUserExistsById, orderController.getUserOrders);
 }

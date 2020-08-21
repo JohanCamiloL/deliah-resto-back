@@ -1,9 +1,9 @@
 const Order = require('../model/Order');
 
 let fakeOrders = [
-    new Order('Description1', 'Time1', 'State1', 'WayToPay1', 1),
-    new Order('Description2', 'Time2', 'State2', 'WayToPay2', 2),
-    new Order('Description3', 'Time3', 'State3', 'WayToPay3', 3)
+    new Order(500000, 1, 'Description1', 'Time1', 'State1', 'WayToPay1', 1),
+    new Order(500001, 2, 'Description2', 'Time2', 'State2', 'WayToPay2', 2),
+    new Order(500002, 3, 'Description3', 'Time3', 'State3', 'WayToPay3', 3)
 ];
 
 /**
@@ -34,12 +34,14 @@ const getOrderById = (id) => {
  */
 const createOrder = (orderProps) => {
     const { description, time, state, wayToPay, total } = orderProps;
+    const { id } = req.userData;
     const query = '';
-    const order = new Order(description, time, state, wayToPay, total);
+    const orderId = fakeOrders[fakeOrders.length - 1].id + 1;
+    const order = new Order(orderId, id, description, time, state, wayToPay, total);
 
     fakeOrders.push(order);
 
-    return 0;
+    return orderId;
 }
 
 /**
@@ -65,7 +67,7 @@ const updateOrder = (id, orderProps) => {
  */
 const deleteOrder = (id) => {
     const query = '';
-    const filteredOrders = fakeOrders.find(order => order.id == id);
+    const filteredOrders = fakeOrders.filter(order => order.id != id);
 
     fakeOrders = filteredOrders;
 }
@@ -77,6 +79,9 @@ const deleteOrder = (id) => {
  */
 const getUserOrders = (userId) => {
     const query = '';
+    const orders = fakeOrders.filter(order => order.userId == userId);
+
+    return orders;
 }
 
 module.exports = {

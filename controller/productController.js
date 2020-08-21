@@ -84,9 +84,9 @@ const verifyIfProductExistsById = (req, res, next) => {
 
     if (!product) {
         res.status(404).json({ message: `Product with id ${id} not found` });
+    } else {
+        next();
     }
-
-    next();
 }
 
 module.exports = {

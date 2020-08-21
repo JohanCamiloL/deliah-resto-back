@@ -92,9 +92,9 @@ const verifyIfOrderExists = (req, res, next) => {
 
     if (!order) {
         res.status(404).json({ message: `Order with id ${id} not found` });
+    } else {
+        next();
     }
-
-    next();
 }
 
 module.exports = {
