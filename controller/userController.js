@@ -6,7 +6,7 @@ const userServices = require('../services/userServices');
  * @param {import('express').Response} res Response object
  */
 const getUsers = async (req, res) => {
-    const users = userServices.getUsers();
+    const users = await userServices.getUsers();
 
     res.status(200).json({ users });
 }
@@ -16,10 +16,10 @@ const getUsers = async (req, res) => {
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
  */
-const getUserById = (req, res) => {
+const getUserById = async (req, res) => {
     const { id } = req.params;
 
-    const user = userServices.getUserById(id);
+    const user = await userServices.getUserById(id);
 
     res.status(200).json({ user });
 }
@@ -29,7 +29,7 @@ const getUserById = (req, res) => {
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
  */
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
     const { username, fullname, email, phone, address, password } = req.body;
 
     if (username && fullname && email && phone && address && password) {
@@ -41,7 +41,7 @@ const createUser = (req, res) => {
         } else if (userByEmail) {
             res.status(409).json({ message: `User with email ${email} already exists` });
         } else {
-            const userId = userServices.createUser({ username, fullname, email, phone, address, password });
+            const userId = await userServices.createUser({ username, fullname, email, phone, address, password });
 
             res.status(201).json({ userId });
         }
@@ -83,10 +83,10 @@ const deleteUser = (req, res) => {
  * @param {import('express').Response} res Response object
  * @param {import('express').NextFunction} next Next function
  */
-const verifyIfUserExistsById = (req, res, next) => {
+const verifyIfUserExistsById = async (req, res, next) => {
     const { id } = req.params;
 
-    const user = userServices.getUserById(id);
+    const user = await userServices.getUserById(id);
 
     if (user) {
         next();

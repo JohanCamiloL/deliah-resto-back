@@ -1,16 +1,4 @@
-const database = require('./database');
-
-/**
- * Execute a new query on database.
- * @param {String} query SQL Query.
- */
-const executeQuery = async (query) => {
-    try {
-        await database.query(query, { raw: true });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+const { executeQuery } = require('./database');
 
 (async () => {
     await executeQuery(`CREATE TABLE User (

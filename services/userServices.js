@@ -1,19 +1,15 @@
 const User = require('../model/User');
-
-let fakeUsers = [
-    new User(1, 'name1', 'fullname1', 'email1', 'phone1', 'address1', 'password1'),
-    new User(2, 'name2', 'fullname2', 'email2', 'phone2', 'address2', 'password2'),
-    new User(3, 'Admin', 'Admin', 'adminmail', 'Adminphone', 'Adminaddress', 'password3', 'admin'),
-];
+const { executeQuery } = require('../config/database');
 
 /**
  * Get all users from database.
  * @returns {Array} Users array.
  */
-const getUsers = () => {
-    const query = '';
+const getUsers = async () => {
+    const query = 'SELECT * FROM User';
+    const [results] = await executeQuery(query);
 
-    return fakeUsers;
+    return results;
 }
 
 /**
@@ -21,10 +17,13 @@ const getUsers = () => {
  * @param {String} id User id.
  * @returns {User} User object.
  */
-const getUserById = (id) => {
-    const query = '';
+const getUserById = async (id) => {
+    const query = `SELECT * FROM User WHERE id = ${id};`;
+    const [results] = await executeQuery(query);
 
-    return fakeUsers.find(user => user.id == id);
+    console.log(results);
+
+    return results[0];
 }
 
 /**
@@ -32,17 +31,17 @@ const getUserById = (id) => {
  * @param {Object} userProps Users object.
  * @returns {String} User id.
  */
-const createUser = (userProps) => {
+const createUser = async (userProps) => {
     const { username, fullname, email, phone, address, password } = userProps;
-    const userId = fakeUsers[fakeUsers.length - 1].id + 1;
+    const user = new User(username, fullname, email, phone, address, password);
 
-    const user = new User(userId, username, fullname, email, phone, address, password);
+    const query = `INSERT INTO User (username, fullname, email, phone, address, role, password) 
+        VALUES ('${user.username}', '${user.fullname}', '${user.email}',
+        '${user.phone}', '${user.address}', '${user.rol}', '${user.password}');`;
 
-    const query = '';
+    const [result] = await executeQuery(query);
 
-    fakeUsers.push(user);
-
-    return userId;
+    return result;
 }
 
 /**
@@ -50,10 +49,11 @@ const createUser = (userProps) => {
  * @param {String} username User username.
  * @returns {User} User.
  */
-const getUserByUsername = (username) => {
-    const query = '';
+const getUserByUsername = async (username) => {
+    const query = `SELECT * FROM User WHERE username = ${username};`;
+    const [results] = await executeQuery(query);
 
-    return fakeUsers.find(user => user.username == username);
+    return results[0];
 }
 
 /**
@@ -61,10 +61,11 @@ const getUserByUsername = (username) => {
  * @param {String} email User email.
  * @returns {User} User object.
  */
-const getUserByEmail = (email) => {
-    const query = '';
+const getUserByEmail = async (email) => {
+    const query = `SELECT * FROM User WHERE email = ${email}`;
+    const [results] = executeQuery(query);
 
-    return fakeUsers.find(user => user.email == email);
+    return results[0];
 }
 
 /**
@@ -72,28 +73,31 @@ const getUserByEmail = (email) => {
  * @param {String} id User id.
  * @param {Object} properties New user properties.
  */
-const updateUser = (id, properties) => {
+const updateUser = async (id, properties) => {
     const { username, fullname, email, phone, address, password } = properties;
-    const query = '';
+    const user = await getUserById(id);
 
-    const user = getUserById(id);
+    const query = `
+        UPDATE User
+        SET username = '${username || user.username}',
+        fullname = '${fullname || user.fullname}',
+        email = '${email || user.email}',
+        phone = '${phone || user.phone}',
+        address = '${address || user.address}',
+        password = '${password || user.password}'
+        WHERE id = ${id}`;
 
-    user.username = username || user.username;
-    user.fullname = fullname || user.fullname;
-    user.email = email || user.email;
-    user.phone = phone || user.phone;
-    user.address = address || user.address;
-    user.password = password || user.password;
+    await executeQuery(query);
 }
 
 /**
  * Deletes an user by the given id.
  * @param {String} id User id.
  */
-const deleteUserById = (id) => {
-    const filteredUsers = fakeUsers.filter(user => user.id != id);
+const deleteUserById = async (id) => {
+    const query = `DELETE FROM User WHERE id = ${id}`;
 
-    fakeUsers = filteredUsers;
+    await executeQuery(query);
 }
 
 /**

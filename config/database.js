@@ -12,4 +12,15 @@ const sequelize = new Sequelize(databaseName, databaseUser, databasePassword, {
     dialect: 'mysql'
 });
 
-module.exports = sequelize;
+/**
+ * Execute the given query on database.
+ * @param {String} query SQL Query.
+ * @returns {Object} Query results promise.
+ */
+const executeQuery = async (query) => {
+    return sequelize.query(query, { raw: true });
+}
+
+module.exports = {
+    executeQuery
+};

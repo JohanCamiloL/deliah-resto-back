@@ -1,7 +1,6 @@
 class User {
     /**
      * User constructor.
-     * @param {Number} id User id
      * @param {String} username User nickname.
      * @param {String} fullname User fullname.
      * @param {String} email User email.
@@ -10,8 +9,7 @@ class User {
      * @param {String} password User password.
      * @param {String} rol User rol.
      */
-    constructor(id, username, fullname, email, phone, address, password, rol = 'user') {
-        this.id = id;
+    constructor(username, fullname, email, phone, address, password, rol = 'user') {
         this.username = username;
         this.fullname = fullname;
         this.email = email;
