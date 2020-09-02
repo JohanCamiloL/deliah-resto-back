@@ -4,32 +4,43 @@ const userServices = require('../services/userServices');
  * Get Users from Database and return an Array of Users.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const getUsers = async (req, res) => {
-    const users = await userServices.getUsers();
+const getUsers = async (req, res, next) => {
+    try {
+        const users = await userServices.getUsers();
 
-    res.status(200).json({ users });
+        res.status(200).json({ users });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /**
  * Get user by its ID.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const getUserById = async (req, res) => {
+const getUserById = async (req, res, next) => {
     const { id } = req.params;
 
-    const user = await userServices.getUserById(id);
+    try {
+        const user = await userServices.getUserById(id);
 
-    res.status(200).json({ user });
+        res.status(200).json({ user });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /**
  * Creates a new user.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
     const { username, fullname, email, phone, address, password } = req.body;
 
     if (username && fullname && email && phone && address && password) {
@@ -41,9 +52,13 @@ const createUser = async (req, res) => {
         } else if (userByEmail) {
             res.status(409).json({ message: `User with email ${email} already exists` });
         } else {
-            const userId = await userServices.createUser({ username, fullname, email, phone, address, password });
+            try {
+                const userId = await userServices.createUser({ username, fullname, email, phone, address, password });
 
-            res.status(201).json({ userId });
+                res.status(201).json({ userId });
+            } catch (error) {
+                next(error);
+            }
         }
     } else {
         res.status(400).json({ message: 'Malformed body' });
@@ -54,27 +69,37 @@ const createUser = async (req, res) => {
  * Updates an user.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
     const { id } = req.params;
     const properties = req.body;
 
-    userServices.updateUser(id, properties);
+    try {
+        await userServices.updateUser(id, properties);
 
-    res.status(200).json({ id });
+        res.status(200).json({ id });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /**
  * Delete user by the given id.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const deleteUser = (req, res) => {
+const deleteUser = (req, res, next) => {
     const { id } = req.params;
 
-    userServices.deleteUserById(id);
+    try {
+        await userServices.deleteUserById(id);
 
-    res.status(200).json({ id });
+        res.status(200).json({ id });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /**
@@ -86,7 +111,13 @@ const deleteUser = (req, res) => {
 const verifyIfUserExistsById = async (req, res, next) => {
     const { id } = req.params;
 
-    const user = await userServices.getUserById(id);
+    let user;
+
+    try {
+        user = await userServices.getUserById(id);
+    } catch (error) {
+        next(error);
+    }
 
     if (user) {
         next();
