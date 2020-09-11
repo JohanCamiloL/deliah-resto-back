@@ -10,7 +10,7 @@ const getUsers = async (req, res, next) => {
     try {
         const users = await userServices.getUsers();
 
-        res.status(200).json({ users });
+        res.status(200).json({ data: users });
     } catch (error) {
         next(error);
     }
@@ -28,7 +28,7 @@ const getUserById = async (req, res, next) => {
     try {
         const user = await userServices.getUserById(id);
 
-        res.status(200).json({ user });
+        res.status(200).json({ data: user });
     } catch (error) {
         next(error);
     }
@@ -55,13 +55,13 @@ const createUser = async (req, res, next) => {
             try {
                 const userId = await userServices.createUser(req.body);
 
-                res.status(201).json({ userId });
+                res.status(201).json({ data: userId });
             } catch (error) {
                 next(error);
             }
         }
     } else {
-        res.status(400).json({ message: 'Malformed body' });
+        res.status(400).json({ error: 'Malformed body' });
     }
 }
 
@@ -78,7 +78,7 @@ const updateUser = async (req, res, next) => {
     try {
         await userServices.updateUser(id, properties);
 
-        res.status(200).json({ id });
+        res.status(200).json({ data: id });
     } catch (error) {
         next(error);
     }
@@ -96,7 +96,7 @@ const deleteUser = async (req, res, next) => {
     try {
         await userServices.deleteUserById(id);
 
-        res.status(200).json({ id });
+        res.status(200).json({ data: id });
     } catch (error) {
         next(error);
     }
@@ -122,7 +122,7 @@ const verifyIfUserExistsById = async (req, res, next) => {
     if (user) {
         next();
     } else {
-        res.status(404).json({ message: `User with id ${id} not found` });
+        res.status(404).json({ error: `User with id ${id} not found` });
     }
 }
 

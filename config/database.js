@@ -3,6 +3,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+/**
+ * Get environment variables from .env file.
+ */
 const databaseName = process.env.DATABASE_NAME;
 const databaseUser = process.env.DATABASE_USER;
 const databasePassword = process.env.DATABASE_PASSWORD;

@@ -1,17 +1,15 @@
 const Product = require('../model/Product');
-
-let fakeProducts = [
-    new Product(100000, 'name1', 1, 1),
-    new Product(100001, 'name2', 2, 2),
-];
+const database = require('../config/database');
 
 /**
  * Get all products.
  */
-const getProducts = () => {
-    const query = '';
+const getProducts = async () => {
+    const query = 'SELECT * FROM Product;';
 
-    return fakeProducts;
+    const result = await database.executeQuery(query, true);
+
+    return result;
 }
 
 /**
@@ -19,10 +17,12 @@ const getProducts = () => {
  * @param {String} id Product id.
  * @returns {Product} Product object.
  */
-const getProductById = (id) => {
-    const query = '';
+const getProductById = async (id) => {
+    const query = 'SELECT * FROM Product WHERE id = :id;';
 
-    return fakeProducts.find(product => product.id == id);
+    const result = await database.executeQuery(query, true, { id });
+
+    return result[0];
 }
 
 /**
@@ -30,16 +30,15 @@ const getProductById = (id) => {
  * @param {Object} productProps Product properties.
  * @returns {String} Product id.
  */
-const createProduct = (productProps) => {
-    const { name, price, amount } = productProps;
-    const productId = fakeProducts[fakeProducts.length - 1].id + 1;
+const createProduct = async (productProps) => {
+    const query = `
+        INSERT INTO Product (name, price, amount)
+        VALUES (:name, :price, :amount);
+    `;
 
-    const query = '';
-    const product = new Product(productId, name, price, amount);
+    const result = await database.executeQuery(query, false, productProps);
 
-    fakeProducts.push(product);
-
-    return productId;
+    return result[0];
 }
 
 /**
@@ -47,25 +46,29 @@ const createProduct = (productProps) => {
  * @param {String} id Product id.
  * @param {Object} productProps Product props.
  */
-const updateProduct = (id, productProps) => {
+const updateProduct = async (id, productProps) => {
     const { name, price, amount } = productProps;
-    const query = '';
-    const product = getProductById(id);
+    const product = await getProductById(id);
 
-    product.name = name || product.name;
-    product.price = price || product.price;
-    product.amount = amount || product.amount;
+    const query = `
+        UPDATE Product
+        SET name = '${name || product.name}',
+        price = ${price || product.price},
+        amount = ${amount || product.amount}
+        WHERE id = ${id};
+    `;
+
+    await database.executeQuery(query);
 }
 
 /**
  * Delete a product by the given id.
  * @param {String} id Product id.
  */
-const deleteProduct = (id) => {
-    const query = '';
-    const filteredProducts = fakeProducts.filter(product => product.id != id);
+const deleteProduct = async (id) => {
+    const query = 'DELETE FROM Product WHERE id = :id;';
 
-    fakeProducts = filteredProducts;
+    await database.executeQuery(query, false, { id });
 }
 
 /**
@@ -73,10 +76,12 @@ const deleteProduct = (id) => {
  * @param {String} name Product name.
  * @returns {Product} Product.
  */
-const getProductByName = (name) => {
-    const query = '';
+const getProductByName = async (name) => {
+    const query = 'SELECT * FROM Product WHERE name = :name;';
 
-    return fakeProducts.find(product => product.name == name);
+    const result = await database.executeQuery(query, true, { name });
+
+    return result[0];
 }
 
 module.exports = {

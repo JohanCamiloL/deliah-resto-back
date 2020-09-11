@@ -4,44 +4,63 @@ const productServices = require('../services/productServices');
  * Get Products from Database and return an Array of Products.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const getProducts = async (req, res) => {
-    const products = productServices.getProducts();
-    res.status(200).json({ products });
+const getProducts = async (req, res, next) => {
+    try {
+        const products = await productServices.getProducts();
+
+        res.status(200).json({ data: products });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /**
  * Get product by its ID.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const getProductById = (req, res) => {
+const getProductById = async (req, res, next) => {
     const { id } = req.params;
-    const product = productServices.getProductById(id);
 
-    res.status(200).json({ product });
+    try {
+        const product = await productServices.getProductById(id);
+
+        res.status(200).json({ data: product });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /**
  * Creates a new product on db.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const createProduct = (req, res) => {
+const createProduct = async (req, res, next) => {
     const { name, price, amount } = req.body;
 
-    const productByName = productServices.getProductByName(name);
+    try {
+        const productByName = await productServices.getProductByName(name);
 
-    if (productByName) {
-        res.status(409).json({ message: `A product with name ${name} already exists` });
-    }
+        if (productByName) {
+            res.status(409).json({ error: `A product with name ${name} already exists` });
+            return;
+        }
 
-    if (name && price && amount) {
-        const productId = productServices.createProduct({ name, price, amount });
+        if (name && price && amount) {
+            const productId = await productServices.createProduct(req.body);
 
-        res.status(201).json({ productId });
-    } else {
-        res.status(400).json({ message: 'Malformed request' });
+            res.status(201).json({ data: productId });
+        } else {
+            res.status(400).json({ error: 'Malformed request' });
+        }
+
+    } catch (error) {
+        next(error);
     }
 }
 
@@ -49,27 +68,36 @@ const createProduct = (req, res) => {
  * Updates a product.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const updateProduct = (req, res) => {
-    const { id } = req.params;
-    const properties = req.body;
+const updateProduct = async (req, res, next) => {
+    const { productId } = req.params;
 
-    productServices.updateProduct(id, properties);
+    try {
+        await productServices.updateProduct(productId, req.body);
 
-    res.status(200).json({ id });
+        res.status(200).json({ data: productId });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /**
  * Delete a product.
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
+ * @param {import('express').NextFunction} next Next function
  */
-const deleteProduct = (req, res) => {
+const deleteProduct = async (req, res, next) => {
     const { id } = req.params;
 
-    productServices.deleteProduct(id);
+    try {
+        await productServices.deleteProduct(id);
 
-    res.status(200).json({ id });
+        res.status(200).json({ data: id });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /**
@@ -78,14 +106,20 @@ const deleteProduct = (req, res) => {
  * @param {import('express').Response} res Response object.
  * @param {import('express').NextFunction} next Next function
  */
-const verifyIfProductExistsById = (req, res, next) => {
+const verifyIfProductExistsById = async (req, res, next) => {
     const { id } = req.params;
-    const product = productServices.getProductById(id);
 
-    if (!product) {
-        res.status(404).json({ message: `Product with id ${id} not found` });
-    } else {
-        next();
+    try {
+        const product = await productServices.getProductById(id);
+
+        if (!product) {
+            res.status(404).json({ error: `Product with id ${id} not found` });
+        } else {
+            next();
+        }
+
+    } catch (error) {
+        next(error);
     }
 }
 

@@ -26,10 +26,10 @@ authRouts(app);
 app.use((err, req, res, next) => {
     if (err) {
         console.log(err);
-        res.json(500).send({ message: 'Internal error' });
+        res.status(500).json({ error: 'Internal error' });
+    } else {
+        next();
     }
-
-    next();
 });
 
 /**

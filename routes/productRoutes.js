@@ -11,7 +11,8 @@ module.exports = (app) => {
 
     app.get('/products', productController.getProducts);
 
-    app.post('/products', userController.verifyUserIdRequestAndRole, productController.createProduct);
+    app.post('/products', userController.verifyUserIdRequestAndRole,
+        productController.createProduct);
 
     app.get('/products/:id', productController.verifyIfProductExistsById, productController.getProductById);
 
