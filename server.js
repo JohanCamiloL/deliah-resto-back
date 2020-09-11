@@ -4,6 +4,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
 const authRouts = require('./routes/authRoutes');
+const { sequelize } = require('./config/database');
 
 const express = require('express');
 const app = express();
@@ -31,4 +32,13 @@ app.use((err, req, res, next) => {
     next();
 });
 
-app.listen(SERVER_PORT, () => console.log(`Server listening on port ${SERVER_PORT}`));
+/**
+ * Server listening on the given port and database authentication.
+ */
+app.listen(SERVER_PORT, () => {
+    console.log(`Server listening on port ${SERVER_PORT}`);
+
+    sequelize.authenticate()
+        .then(console.log('Database conenction succesfull'))
+        .catch(error => console.log(error));
+});

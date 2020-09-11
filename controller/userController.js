@@ -44,8 +44,8 @@ const createUser = async (req, res, next) => {
     const { username, fullname, email, phone, address, password } = req.body;
 
     if (username && fullname && email && phone && address && password) {
-        const userByUsername = userServices.getUserByUsername(username);
-        const userByEmail = userServices.getUserByEmail(email);
+        const userByUsername = await userServices.getUserByUsername(username);
+        const userByEmail = await userServices.getUserByEmail(email);
 
         if (userByUsername) {
             res.status(409).json({ message: `User with username ${username} already exists` });
@@ -53,7 +53,7 @@ const createUser = async (req, res, next) => {
             res.status(409).json({ message: `User with email ${email} already exists` });
         } else {
             try {
-                const userId = await userServices.createUser({ username, fullname, email, phone, address, password });
+                const userId = await userServices.createUser(req.body);
 
                 res.status(201).json({ userId });
             } catch (error) {
@@ -71,7 +71,7 @@ const createUser = async (req, res, next) => {
  * @param {import('express').Response} res Response object
  * @param {import('express').NextFunction} next Next function
  */
-const updateUser = (req, res, next) => {
+const updateUser = async (req, res, next) => {
     const { id } = req.params;
     const properties = req.body;
 
@@ -90,7 +90,7 @@ const updateUser = (req, res, next) => {
  * @param {import('express').Response} res Response object
  * @param {import('express').NextFunction} next Next function
  */
-const deleteUser = (req, res, next) => {
+const deleteUser = async (req, res, next) => {
     const { id } = req.params;
 
     try {

@@ -6,8 +6,8 @@ const { executeQuery } = require('../config/database');
  * @returns {Array} Users array.
  */
 const getUsers = async () => {
-    const query = 'SELECT * FROM User';
-    const [results] = await executeQuery(query);
+    const query = 'SELECT * FROM User;';
+    const results = await executeQuery(query, true);
 
     return results;
 }
@@ -18,10 +18,8 @@ const getUsers = async () => {
  * @returns {User} User object.
  */
 const getUserById = async (id) => {
-    const query = `SELECT * FROM User WHERE id = ${id};`;
-    const [results] = await executeQuery(query);
-
-    console.log(results);
+    const query = 'SELECT * FROM User WHERE id = :id;';
+    const results = await executeQuery(query, true, { id });
 
     return results[0];
 }
@@ -32,16 +30,12 @@ const getUserById = async (id) => {
  * @returns {String} User id.
  */
 const createUser = async (userProps) => {
-    const { username, fullname, email, phone, address, password } = userProps;
-    const user = new User(username, fullname, email, phone, address, password);
+    const query = `INSERT INTO User (username, fullname, email, phone, address, password) 
+        VALUES (:username, :fullname, :email, :phone, :address, :password);`;
 
-    const query = `INSERT INTO User (username, fullname, email, phone, address, role, password) 
-        VALUES ('${user.username}', '${user.fullname}', '${user.email}',
-        '${user.phone}', '${user.address}', '${user.rol}', '${user.password}');`;
+    const result = await executeQuery(query, false, userProps);
 
-    const [result] = await executeQuery(query);
-
-    return result;
+    return result[0];
 }
 
 /**
@@ -50,8 +44,8 @@ const createUser = async (userProps) => {
  * @returns {User} User.
  */
 const getUserByUsername = async (username) => {
-    const query = `SELECT * FROM User WHERE username = ${username};`;
-    const [results] = await executeQuery(query);
+    const query = `SELECT * FROM User WHERE username = :username`;
+    const results = await executeQuery(query, true, { username });
 
     return results[0];
 }
@@ -62,8 +56,8 @@ const getUserByUsername = async (username) => {
  * @returns {User} User object.
  */
 const getUserByEmail = async (email) => {
-    const query = `SELECT * FROM User WHERE email = ${email}`;
-    const [results] = executeQuery(query);
+    const query = `SELECT * FROM User WHERE email = :email`;
+    const results = await executeQuery(query, true, { email });
 
     return results[0];
 }
