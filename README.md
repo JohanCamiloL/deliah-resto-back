@@ -32,7 +32,7 @@ DATABASE_PASSWORD=YWB9yBWPoH
 - You have to consider that you have to create the environment variable `SECRET_KEY` no matter if you are or aren't using a remote MySQL engine.
 
 # How to use
-- Once you have all the dependencies installed and files created you can run the server, this will run the express server and create the database connectio to run all the neccesary queries. To run the server, you have to run the next script `node server.js` on the root folder, this will show you on the terminal the port where the server is listening for requests.
+- Once you have all the dependencies installed and files created you can run the server, this will run the express server and create the database connection to run all the neccesary queries. To run the server, you have to run the next script `node server.js` on the root folder, this will show you on the terminal the port where the server is listening for requests and the database connection message.
 
 # Tests and evidences
 

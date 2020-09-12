@@ -1,19 +1,15 @@
-const Order = require('../model/Order');
-
-let fakeOrders = [
-    new Order(500000, 1, 'Description1', 'Time1', 'State1', 'WayToPay1', 1),
-    new Order(500001, 2, 'Description2', 'Time2', 'State2', 'WayToPay2', 2),
-    new Order(500002, 3, 'Description3', 'Time3', 'State3', 'WayToPay3', 3)
-];
+const database = require('../config/database');
 
 /**
  * Get all orders.
  * @returns {Array} Orders array.
  */
-const getOrders = () => {
-    const query = '';
+const getOrders = async () => {
+    const query = 'SELECT * FROM ResOrder';
 
-    return fakeOrders;
+    const result = await database.executeQuery(query, true);
+
+    return result;
 }
 
 /**
@@ -21,27 +17,41 @@ const getOrders = () => {
  * @param {String} id Order id.
  * @returns {Order} Order object.
  */
-const getOrderById = (id) => {
-    const query = '';
+const getOrderById = async (id) => {
+    const query = 'SELECT * FROM ResOrder WHERE id = :id';
 
-    return fakeOrders.find(order => order.id == id);
+    const result = await database.executeQuery(query, true, { id });
+
+    return result[0];
 }
 
 /**
  * Create a new order.
+ * @param {Number} userId User id
  * @param {Object} orderProps Order properties.
  * @returns {String} Order id.
  */
-const createOrder = (orderProps) => {
-    const { description, time, state, wayToPay, total } = orderProps;
-    const { id } = req.userData;
-    const query = '';
-    const orderId = fakeOrders[fakeOrders.length - 1].id + 1;
-    const order = new Order(orderId, id, description, time, state, wayToPay, total);
+const createOrder = async (userId, orderProps) => {
+    orderProps.userId = userId;
 
-    fakeOrders.push(order);
+    const query = `
+        INSERT INTO ResOrder (userId, description, time, state, wayToPay, total)
+        VALUES (:userId, :description, :time, :state, :wayToPay, :total);
+    `;
 
-    return orderId;
+
+    const result = await database.executeQuery(query, false, orderProps);
+
+    const orderProductQuery = `
+        INSERT INTO OrderProduct (orderId, productId)
+        VALUES (:orderId, :productId)
+    `;
+
+    orderProps.products.forEach(async productId => {
+        await database.executeQuery(orderProductQuery, false, { orderId: result[0], productId });
+    });
+
+    return result[0];
 }
 
 /**
@@ -49,27 +59,28 @@ const createOrder = (orderProps) => {
  * @param {String} id Order id.
  * @param {Object} orderProps 
  */
-const updateOrder = (id, orderProps) => {
-    const { description, time, state, wayToPay, total } = orderProps;
-    const query = '';
-    const order = getOrderById(id);
+const updateOrder = async (id, orderProps) => {
+    const { description, state } = orderProps;
+    const order = await getOrderById(id);
 
-    order.description = description || order.description;
-    order.time = time || order.time;
-    order.state = state || order.state;
-    order.wayToPay = wayToPay || order.wayToPay;
-    order.total = total || order.total;
+    const query = `
+        UPDATE ResOrder
+        SET description = '${description || order.description}',
+        state = '${state || order.state}'
+        WHERE id = :id
+    `;
+
+    await database.executeQuery(query, false, { id });
 }
 
 /**
  * Delete an order with the given id.
  * @param {String} id Order id.
  */
-const deleteOrder = (id) => {
-    const query = '';
-    const filteredOrders = fakeOrders.filter(order => order.id != id);
+const deleteOrder = async (id) => {
+    const query = 'DELETE FROM ResOrder WHERE id = :id';
 
-    fakeOrders = filteredOrders;
+    await database.executeQuery(query, false, { id });
 }
 
 /**
@@ -77,11 +88,28 @@ const deleteOrder = (id) => {
  * @param {String} userId User id.
  * @returns {Array} Orders array.
  */
-const getUserOrders = (userId) => {
-    const query = '';
-    const orders = fakeOrders.filter(order => order.userId == userId);
+const getUserOrders = async (userId) => {
+    const query = 'SELECT * FROM ResOrder WHERE userId = :userId';
+    const result = await database.executeQuery(query, true, { userId });
 
-    return orders;
+    return result;
+}
+
+/**
+ * Get products from order.
+ * @param {Number} orderId Order id.
+ * @returns {Array} Order products list.
+ */
+const getOrderProducts = async (orderId) => {
+    const query = `
+        SELECT name, price FROM Product
+        JOIN OrderProduct ON Product.id = OrderProduct.productId
+        WHERE OrderProduct.orderId = :orderId;
+    `;
+
+    const result = database.executeQuery(query, true, { orderId });
+
+    return result;
 }
 
 module.exports = {
@@ -90,5 +118,6 @@ module.exports = {
     createOrder,
     updateOrder,
     deleteOrder,
-    getUserOrders
+    getUserOrders,
+    getOrderProducts
 }

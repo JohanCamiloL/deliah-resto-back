@@ -100,8 +100,8 @@ const deleteUserById = async (id) => {
  * @param {String} password User password.
  * @returns {Boolean} User exists.
  */
-const verifyEmailAndPassword = (email, password) => {
-    const user = getUserByEmail(email);
+const verifyEmailAndPassword = async (email, password) => {
+    const user = await getUserByEmail(email);
 
     if (!user) return false;
 

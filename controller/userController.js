@@ -23,10 +23,10 @@ const getUsers = async (req, res, next) => {
  * @param {import('express').NextFunction} next Next function
  */
 const getUserById = async (req, res, next) => {
-    const { id } = req.params;
+    const { userId } = req.params;
 
     try {
-        const user = await userServices.getUserById(id);
+        const user = await userServices.getUserById(userId);
 
         res.status(200).json({ data: user });
     } catch (error) {
@@ -72,13 +72,13 @@ const createUser = async (req, res, next) => {
  * @param {import('express').NextFunction} next Next function
  */
 const updateUser = async (req, res, next) => {
-    const { id } = req.params;
+    const { userId } = req.params;
     const properties = req.body;
 
     try {
-        await userServices.updateUser(id, properties);
+        await userServices.updateUser(userId, properties);
 
-        res.status(200).json({ data: id });
+        res.status(200).json({ data: userId });
     } catch (error) {
         next(error);
     }
@@ -91,12 +91,12 @@ const updateUser = async (req, res, next) => {
  * @param {import('express').NextFunction} next Next function
  */
 const deleteUser = async (req, res, next) => {
-    const { id } = req.params;
+    const { userId } = req.params;
 
     try {
-        await userServices.deleteUserById(id);
+        await userServices.deleteUserById(userId);
 
-        res.status(200).json({ data: id });
+        res.status(200).json({ data: userId });
     } catch (error) {
         next(error);
     }
@@ -109,12 +109,12 @@ const deleteUser = async (req, res, next) => {
  * @param {import('express').NextFunction} next Next function
  */
 const verifyIfUserExistsById = async (req, res, next) => {
-    const { id } = req.params;
+    const { userId } = req.params;
 
     let user;
 
     try {
-        user = await userServices.getUserById(id);
+        user = await userServices.getUserById(userId);
     } catch (error) {
         next(error);
     }
@@ -122,7 +122,7 @@ const verifyIfUserExistsById = async (req, res, next) => {
     if (user) {
         next();
     } else {
-        res.status(404).json({ error: `User with id ${id} not found` });
+        res.status(404).json({ error: `User with id ${userId} not found` });
     }
 }
 
@@ -134,11 +134,11 @@ const verifyIfUserExistsById = async (req, res, next) => {
  * @param {import('express').NextFunction} next Next function
  */
 const verifyUserIdRequestAndRole = (req, res, next) => {
-    const { id } = req.params;
-    const userId = req.userData.id;
+    const { userId } = req.params;
+    const userTokenId = req.userData.id;
     const { rol } = req.userData;
 
-    if (id == userId || rol === 'admin') {
+    if (userId == userTokenId || rol === 'admin') {
         next();
     } else {
         res.status(401).json({ error: 'You don\'t have rights to make this request' });

@@ -22,6 +22,9 @@ module.exports = (app) => {
     app.delete('/orders/:id', userController.verifyUserIdRequestAndRole,
         orderController.verifyIfOrderExists, orderController.deleteOrder);
 
-    app.get('/users/:id/orders', authController.verifyToken, userController.verifyUserIdRequestAndRole,
+    app.get('/orders/users/:id', authController.verifyToken, userController.verifyUserIdRequestAndRole,
         userController.verifyIfUserExistsById, orderController.getUserOrders);
+
+    app.get('/orders/:id/products', userController.verifyUserIdRequestAndRole,
+        orderController.verifyIfOrderExists, orderController.getOrderProducts);
 }

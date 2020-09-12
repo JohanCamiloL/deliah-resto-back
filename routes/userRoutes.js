@@ -11,12 +11,12 @@ module.exports = (app) => {
 
     app.post('/users', userController.createUser);
 
-    app.put('/users/:id', authController.verifyToken, userController.verifyUserIdRequestAndRole,
+    app.put('/users/:userId', authController.verifyToken, userController.verifyUserIdRequestAndRole,
         userController.verifyIfUserExistsById, userController.updateUser);
 
-    app.get('/users/:id', authController.verifyToken, userController.verifyUserIdRequestAndRole,
+    app.get('/users/:userId', authController.verifyToken, userController.verifyUserIdRequestAndRole,
         userController.verifyIfUserExistsById, userController.getUserById);
 
-    app.delete('/users/:id', authController.verifyToken, userController.verifyUserIdRequestAndRole,
+    app.delete('/users/:userId', authController.verifyToken, userController.verifyUserIdRequestAndRole,
         userController.verifyIfUserExistsById, userController.deleteUser);
 }

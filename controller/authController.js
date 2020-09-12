@@ -6,10 +6,10 @@ const userServices = require('../services/userServices');
  * @param {import('express').Request} req Request object
  * @param {import('express').Response} res Response object
  */
-const login = (req, res) => {
+const login = async (req, res) => {
     const { email, password } = req.body;
 
-    const user = userServices.verifyEmailAndPassword(email, password);
+    const user = await userServices.verifyEmailAndPassword(email, password);
 
     if (user) {
         const token = authServices.generateToken(user);
