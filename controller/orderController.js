@@ -22,11 +22,11 @@ const getOrders = async (req, res, next) => {
  * @param {import('express').Response} res Response object
  * @param {import('express').NextFunction} next Next function
  */
-const getOrderById = (req, res, next) => {
+const getOrderById = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const order = orderServices.getOrderById(id);
+        const order = await orderServices.getOrderById(id);
 
         res.status(200).json({ data: order });
     } catch (error) {

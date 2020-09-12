@@ -5,7 +5,11 @@ const database = require('../config/database');
  * @returns {Array} Orders array.
  */
 const getOrders = async () => {
-    const query = 'SELECT * FROM ResOrder';
+    const query = `
+        SELECT time, state, wayToPay, name FROM ResOrder 
+        JOIN OrderProduct ON ResOrder.id = OrderProduct.orderId 
+        JOIN Product ON OrderProduct.productId = Product.id 
+    `;
 
     const result = await database.executeQuery(query, true);
 
@@ -18,11 +22,16 @@ const getOrders = async () => {
  * @returns {Order} Order object.
  */
 const getOrderById = async (id) => {
-    const query = 'SELECT * FROM ResOrder WHERE id = :id';
+    const query = `
+        SELECT time, state, wayToPay, name FROM ResOrder 
+        JOIN OrderProduct ON ResOrder.id = OrderProduct.orderId 
+        JOIN Product ON OrderProduct.productId = Product.id 
+        WHERE ResOrder.id = '2';
+    `;
 
     const result = await database.executeQuery(query, true, { id });
 
-    return result[0];
+    return result;
 }
 
 /**
