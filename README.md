@@ -3,7 +3,7 @@ Backend developed with NodeJS which comprends the Deliah Restaurant logic
 
 # Installation
 - Clone the repository on your local machine.
-- This project uses an remote MySQL engine instance on remotemysql.com, so you don't have to install MySQL on your localmachine, if you prefer to use local MySQL engine you have to set the host on config/database to localhost.
+- This project uses a remote MySQL engine instance on remotemysql.com, so you don't have to install MySQL on your localmachine, if you prefer to use local MySQL engine you have to set the host on config/database.js file to localhost.
 
 ```
 const sequelize = new Sequelize(databaseName, databaseUser, databasePassword, {
@@ -21,18 +21,19 @@ DATABASE_PASSWORD=MyDatabasePassword
 SECRET_KEY=MySecretKey
  ```
 
-- Once you have the file created, you can install all the necessary dependencies running the next script `npm install` on the root folder and this will download the dependencies.
+- Once you have the file created, you can install all the necessary dependencies running the next script `npm install` on the root folder and this will download the dependencies (You have to install npm if you don't have it).
 
-- If you are using a new database, you have to run a file called `databaseInit.js` with the script `node databaseInit.js` on the config file, this will create all the tables on the given database.
-- If you are not using a new database, you can use the next evironment variables to connect to the remote MySQL engine<br>
-DATABASE_USER=yFmHfRwPkD<br>
+- If you are using a new database, you have to run a file called `databaseInit.js` with the script `node databaseInit.js` placed on the config folder, this will create all the tables on the given database.
+- If you are not using a new database, you can use the next evironment variables to connect to the remote MySQL engine:
+```
+DATABASE_USER=yFmHfRwPkD
 DATABASE_NAME=yFmHfRwPkD
 DATABASE_PASSWORD=YWB9yBWPoH
+```
 
 - You have to consider that you have to create the environment variable `SECRET_KEY` no matter if you are or aren't using a remote MySQL engine.
 
 # How to use
-- Once you have all the dependencies installed and files created you can run the server, this will run the express server and create the database connection to run all the neccesary queries. To run the server, you have to run the next script `node server.js` on the root folder, this will show you on the terminal the port where the server is listening for requests and the database connection message.
+- Once you have all the dependencies installed and files created you can run the server, this will run the express server and create the database connection to run all the neccesary queries. To run the server, you have to run the script `node server.js` on the root folder, this will show you on the terminal the port where the server is listening for requests and the database connection message.
 
-# Tests and evidences
-
+- In this URL https://app.swaggerhub.com/apis/JohanCamiloL/deliahresto/1.0.0 you can find all the information about the API and the available routes to made different HTTP requests to the server.
