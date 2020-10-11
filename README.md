@@ -35,5 +35,3 @@ DATABASE_PASSWORD=YWB9yBWPoH
 
 # How to use
 - Once you have all the dependencies installed and files created you can run the server, this will run the express server and create the database connection to run all the neccesary queries. To run the server, you have to run the script `node server.js` on the root folder, this will show you on the terminal the port where the server is listening for requests and the database connection message.
-
-- In this URL https://app.swaggerhub.com/apis/JohanCamiloL/deliahresto/1.0.0 you can find all the information about the API and the available routes to made different HTTP requests to the server.
