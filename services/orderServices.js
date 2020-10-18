@@ -26,7 +26,7 @@ const getOrderById = async (id) => {
         SELECT time, state, wayToPay, name FROM ResOrder 
         JOIN OrderProduct ON ResOrder.id = OrderProduct.orderId 
         JOIN Product ON OrderProduct.productId = Product.id 
-        WHERE ResOrder.id = '2';
+        WHERE ResOrder.id = :id;
     `;
 
     const result = await database.executeQuery(query, true, { id });

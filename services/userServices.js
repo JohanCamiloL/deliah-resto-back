@@ -1,4 +1,3 @@
-const User = require('../model/User');
 const { executeQuery } = require('../config/database');
 
 /**
