@@ -35,3 +35,8 @@ DATABASE_PASSWORD=YWB9yBWPoH
 
 # How to use
 - Once you have all the dependencies installed and files created you can run the server, this will run the express server and create the database connection to run all the neccesary queries. To run the server, you have to run the script `node server.js` on the root folder, this will show you on the terminal the port where the server is listening for requests and the database connection message.
+- To use a user as admin, yo have to run an own database query to create a user with admin role. You can execute this example query or create yor own. With this, you can test all the admin requirements.
+```
+INSERT INTO User VALUES ('admin', 'Admin full name', 'admin@mail.com', '3124124342', 'Admin address', 'admin', 'adminPassword');
+```
+- The API specification is on this link https://www.getpostman.com/collections/a1c86e96801c42103e2d. If you take a look over the API definition, there are some environment variables, this variables are the base url when the API is running local and the adminToken that is generated when you login with an admin account. There is a third variable named userToken which is the user token generated when login is performed. You can create this variables or use the values directly in the request headers.
