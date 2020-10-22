@@ -13,7 +13,7 @@ const generateToken = (user) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        rol: user.rol
+        rol: user.role
     }, process.env.SECRET_KEY);
 }
 
