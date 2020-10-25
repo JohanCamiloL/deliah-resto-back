@@ -23,7 +23,7 @@ const getOrders = async () => {
  */
 const getOrderById = async (id) => {
     const query = `
-        SELECT time, state, wayToPay, name FROM ResOrder 
+        SELECT time, state, wayToPay, name, productAmount FROM ResOrder 
         JOIN OrderProduct ON ResOrder.id = OrderProduct.orderId 
         JOIN Product ON OrderProduct.productId = Product.id 
         WHERE ResOrder.id = :id;
@@ -38,7 +38,7 @@ const getOrderById = async (id) => {
  * Create a new order.
  * @param {Number} userId User id
  * @param {Object} orderProps Order properties.
- * @returns {String} Order id.
+ * @returns {Promise<String>} Order id.
  */
 const createOrder = async (userId, orderProps) => {
     orderProps.userId = userId;
@@ -52,12 +52,13 @@ const createOrder = async (userId, orderProps) => {
     const result = await database.executeQuery(query, false, orderProps);
 
     const orderProductQuery = `
-        INSERT INTO OrderProduct (orderId, productId)
-        VALUES (:orderId, :productId)
+        INSERT INTO OrderProduct (orderId, productId, productAmount)
+        VALUES (:orderId, :productId, :productAmount)
     `;
 
-    orderProps.products.forEach(async productId => {
-        await database.executeQuery(orderProductQuery, false, { orderId: result[0], productId });
+    orderProps.products.forEach(async ({ productId, productAmount }) => {
+        await database
+            .executeQuery(orderProductQuery, false, { orderId: result[0], productId, productAmount });
     });
 
     return result[0];

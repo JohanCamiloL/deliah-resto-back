@@ -11,7 +11,7 @@ const databaseUser = process.env.DATABASE_USER;
 const databasePassword = process.env.DATABASE_PASSWORD;
 
 const sequelize = new Sequelize(databaseName, databaseUser, databasePassword, {
-    host: 'remotemysql.com',
+    host: 'localhost',
     dialect: 'mysql'
 });
 

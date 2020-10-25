@@ -32,6 +32,7 @@ const { executeQuery } = require('./database');
     await executeQuery(`CREATE TABLE OrderProduct (
         orderId int not null,
         productId int not null,
+        productAmount int not null,
         primary key(orderId, productId)
     );`);
 })();
