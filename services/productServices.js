@@ -15,7 +15,7 @@ const getProducts = async () => {
 /**
  * Get product by the given id.
  * @param {String} id Product id.
- * @returns {Product} Product object.
+ * @returns {Promise} Product object.
  */
 const getProductById = async (id) => {
     const query = 'SELECT * FROM Product WHERE id = :id;';

@@ -71,12 +71,12 @@ const createProduct = async (req, res, next) => {
  * @param {import('express').NextFunction} next Next function
  */
 const updateProduct = async (req, res, next) => {
-    const { productId } = req.params;
+    const { id } = req.params;
 
     try {
-        await productServices.updateProduct(productId, req.body);
+        await productServices.updateProduct(id, req.body);
 
-        res.status(200).json({ data: productId });
+        res.status(200).json({ data: id });
     } catch (error) {
         next(error);
     }
